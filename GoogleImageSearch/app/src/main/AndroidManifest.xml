@@ -12,7 +12,7 @@
         <activity
             android:name=".activities.ImageSearchActivity"
             android:label="@string/search_page_title"
-            android:theme="@style/Theme.HighlightCopy">
+            android:theme="@style/AppTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,7 +23,15 @@
             android:name=".activities.DisplayImageActivity"
             android:label="@string/title_activity_display_image"
             android:parentActivityName=".activities.ImageSearchActivity"
-            android:theme="@style/Theme.HighlightCopy">
+            android:theme="@style/Theme.HighlightCopy" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.avklabs.googleimagesearch.activities.ImageSearchActivity" />
+        </activity>
+        <activity
+            android:name=".activities.FiltersActivity"
+            android:label="@string/title_activity_filters"
+            android:parentActivityName=".activities.ImageSearchActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.avklabs.googleimagesearch.activities.ImageSearchActivity" />
