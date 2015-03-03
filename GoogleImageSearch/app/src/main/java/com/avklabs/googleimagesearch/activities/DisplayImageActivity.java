@@ -1,8 +1,10 @@
 package com.avklabs.googleimagesearch.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -28,6 +30,8 @@ public class DisplayImageActivity extends Activity {
         //String image_url = getIntent().getStringExtra("url");
         ImageResult imageResult = (ImageResult) getIntent().getSerializableExtra("imageObj");
 
+        Log.e("Loading", imageResult.image_url);
+
         ImageView iv = (ImageView) findViewById(R.id.ivFullImage);
         TextView tvTitle = (TextView) findViewById(R.id.tvFullTitle);
 
@@ -42,9 +46,17 @@ public class DisplayImageActivity extends Activity {
                 hideProgressBar();
                 TextView tvTitle = (TextView) findViewById(R.id.tvFullTitle);
                 tvTitle.setText(Html.fromHtml("Failed to load: "+tvTitle.getText().toString()));
+                //reportError(tvTitle.getText().toString());
             }
         });
         tvTitle.setText(Html.fromHtml(imageResult.title));
+    }
+
+    public void reportError(String url) {
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        sharingIntent.setType("text/html");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html.fromHtml(url));
+        startActivity(Intent.createChooser(sharingIntent,"Share using"));
     }
 
     // Should be called manually when an async task has started

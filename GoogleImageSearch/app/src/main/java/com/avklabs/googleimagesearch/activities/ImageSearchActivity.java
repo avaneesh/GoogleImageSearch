@@ -83,7 +83,7 @@ public class ImageSearchActivity extends ActionBarActivity {
         gvResults.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemCount) {
-                fetchImages(page);
+                fetchImages(page); // load the page requested by EndlessScroller
             }
         });
     }
@@ -94,14 +94,16 @@ public class ImageSearchActivity extends ActionBarActivity {
 
         this.search_url =
                 "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&q=" + query;
-        imageResults.clear();
-        fetchImages(0);
+        //imageResults.clear();
+        //aResults.notifyDataSetChanged();
+        aResults.clear(); // clear the adapter
+        fetchImages(1); //load first page
     }
 
-    private void fetchImages(int currPage){
+    private void fetchImages(int pageToLoad){
         AsyncHttpClient client = new AsyncHttpClient();
 
-        String currUrl = this.search_url +"&start="+currPage*IMAGES_PER_PAGE;
+        String currUrl = this.search_url +"&start="+((pageToLoad-1)*IMAGES_PER_PAGE);
 
         // Add filters
         currUrl += imageFilters.generateFilterQuery();

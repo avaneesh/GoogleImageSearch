@@ -36,16 +36,15 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
 
         // If the total item count is zero and the previous isn't, assume the
         //        list is invalidated and should be reset back to initial state
+        // NOTE: use adapter.clear() instead of array.clear() for new requests.
+        // This ensures totalItemCount is set to 0
         if (totalItemCount < this.previousTotalCount) {
             this.currentPageIndex = this.startingPageIndex;
-            this.previousTotalCount = 0; // totalItemCount
-            if (totalItemCount == 0){
+            this.previousTotalCount = totalItemCount; // reset
+
+            if(totalItemCount == 0) {
                 this.loading = true;
-                Log.e("scroll", "Loading now.....");
-            }
-            else {
-                this.loading = true;
-                Log.e("scroll ERR", "totalItemCount "+ totalItemCount +" is less than previousTotalCount: "+this.previousTotalCount);
+                Log.e("scroll", "Reset detected, loading new data");
             }
         }
 
@@ -53,7 +52,7 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
         // changed, if so we conclude it has finished loading and update the current page
         // number and total item count.
         if ( loading && (totalItemCount > this.previousTotalCount) ) {
-            this.currentPageIndex++;
+            this.currentPageIndex++; // done loading this page
             this.loading = false;
             this.previousTotalCount = totalItemCount;
             Log.e("scroll", "Loading finished ... ");
@@ -63,7 +62,7 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
         // the visibleThreshold and need to reload more data.
         // If we do need to reload some more data, we execute onLoadMore to fetch the data.
         if ( !loading && (totalItemCount - visibleItemCount)<=(firstVisibleItem + this.visibleThreshold) ) {
-            onLoadMore(currentPageIndex + 1, totalItemCount);
+            onLoadMore(currentPageIndex + 1, totalItemCount); //load next page
             this.loading = true;
             Log.e("scroll", "Loading more ... ");
         }
